@@ -6,20 +6,33 @@
 /*   By: gferreir <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/15 14:52:52 by gferreir          #+#    #+#             */
-/*   Updated: 2018/09/03 09:20:01 by gferreir         ###   ########.fr       */
+/*   Updated: 2018/09/03 09:53:32 by gferreir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libftprintf.h"
 
-int		ft_printf(const char *format, ...)
+static int		is_flag(const char format)
+{
+	return (format != 'c' && format != 'C' && format != 'X' && format != 'x' &&
+			format != 'U' && format != 'u' && format != 'O' && format != 'o' && 
+			format != 'i' && format != 'D' && format != 'd' && format != 'p' && 
+			format != 'S' && format != 's' && format != '%' && format != '\0');
+}
+
+static void		valid(const char *f)
+{
+	if (!f)
+		exit(-1);
+}
+
+int				ft_printf(const char *format, ...)
 {
 	va_list	arg;
 	int		i;
 	int		res;
 
-	if (!format)
-		exit(-1);
+	valid(format);
 	i = 0;
 	res = 0;
 	va_start(arg, format);
@@ -30,10 +43,7 @@ int		ft_printf(const char *format, ...)
 			i++;
 			if (format[i] == '\0')
 				break ;
-			while (format[i] != 'c' && format[i] != 'C' && format[i] != 'X' && format[i] != 'x' && format[i] != 'U'
-					&& format[i] != 'u' && format[i] != 'O' && format[i] != 'o' && format[i] != 'i' && format[i] != 'D'
-					&& format[i] != 'd' && format[i] != 'p' && format[i] != 'S' && format[i] != 's' && format[i] != '%'
-					&& format[i] != '\0')
+			while (is_flag(format[i]))
 				i++;
 			res += ft_handler(arg, format[i]);
 		}
